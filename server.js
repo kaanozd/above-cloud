@@ -1,15 +1,24 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES modules için __dirname equivalent
+const __filename = fileURLToPath(
+    import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8080; // ✅ 8080 yapıldı
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// ✅ STATIC FILES - KESİN ÇÖZÜM
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Hava durumu endpoint'i - 7 GÜNLÜK TAHMİN
 app.get('/api/weather', async(req, res) => {
@@ -184,7 +193,7 @@ app.get('/api/health', (req, res) => {
 
 // Root endpoint - Frontend'i serve et
 app.get('/', (req, res) => {
-    res.sendFile(process.cwd() + '/public/index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 404 handler
@@ -192,7 +201,6 @@ app.use('*', (req, res) => {
     res.status(404).json({ error: 'Endpoint bulunamadı' });
 });
 
-// ✅ DÜZELTİLDİ: 0.0.0.0 ve PORT 8080
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
