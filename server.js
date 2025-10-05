@@ -205,3 +205,10 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+app.use(cors({
+    origin: [
+        'https://your-netlify-domain.netlify.app',
+        'http://localhost:3000'
+    ],
+    credentials: true
+}));

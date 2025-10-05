@@ -3,6 +3,7 @@ class GeminiAI {
         // Netlify frontend, Railway backend
         this.backendUrl = 'https://above-cloud-production.up.railway.app/api';
         this.conversationHistory = [];
+        console.log('🔗 Backend URL:', this.backendUrl);
     }
 
     async getWeatherAdvice(weatherData, userQuestion) {
