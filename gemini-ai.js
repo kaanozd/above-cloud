@@ -33,7 +33,7 @@ class GeminiAI {
             }
 
             const data = await response.json();
-
+            a
             if (data.success) {
                 // Konuşma geçmişine ekle
                 this.addToHistory(userQuestion, data.answer);
