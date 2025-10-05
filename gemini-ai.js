@@ -1,11 +1,8 @@
 class GeminiAI {
     constructor() {
-        // Dynamic backend URL - production'da otomatik, development'ta localhost
-        this.backendUrl = window.location.hostname === 'localhost' ?
-            'http://localhost:3001/api' :
-            `${window.location.origin}/api`;
+        // Netlify frontend, Railway backend
+        this.backendUrl = 'https://above-cloud-production.up.railway.app/api';
         this.conversationHistory = [];
-        console.log('Backend URL:', this.backendUrl); // Debug için
     }
 
     async getWeatherAdvice(weatherData, userQuestion) {
