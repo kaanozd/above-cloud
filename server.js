@@ -14,10 +14,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
-app.use(express.json());
+// ✅ CORS AYARI - NETLIFY DOMAIN'E İZİN VER
+app.use(cors({
+    origin: [
+        'https://lucent-centaur-6316f1.netlify.app',
+        'http://localhost:3000',
+        'http://localhost:3001'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// ✅ STATIC FILES - KESİN ÇÖZÜM
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Hava durumu endpoint'i - 7 GÜNLÜK TAHMİN
@@ -191,11 +200,6 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Root endpoint - Frontend'i serve et
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // 404 handler
 app.use('*', (req, res) => {
     res.status(404).json({ error: 'Endpoint bulunamadı' });
@@ -204,11 +208,5 @@ app.use('*', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📍 CORS enabled for: https://lucent-centaur-6316f1.netlify.app`);
 });
-app.use(cors({
-    origin: [
-        'https://your-netlify-domain.netlify.app',
-        'http://localhost:3000'
-    ],
-    credentials: true
-}));
