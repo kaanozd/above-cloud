@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather Forecast</h1>
+        </header>
+
+        <main>
+            <div class="app-layout">
+                <!-- Left Side: Map -->
+                <section class="map-section">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button id="locate-me" class="map-btn">📍 Locate Me</button>
+                        <button id="reset-map" class="map-btn">🗺️ Reset View</button>
+                    </div>
+                </section>
+
+                <!-- Right Side: Weather Content -->
+                <section class="weather-section">
+                    <!-- Location Input Section -->
+                    <section class="location-section">
+                        <div class="search-container">
+                            <div class="search-wrapper">
+                                <input type="text" id="location-input" placeholder="Enter city name (e.g., Istanbul)..." class="location-input">
+                                <div id="autocomplete-results" class="autocomplete-results"></div>
+                            </div>
+                            <button id="search-btn" class="search-btn">Search</button>
+                        </div>
+                        <div class="location-options">
+                            <button id="use-current-location" class="location-option-btn">
+                                📍 Use Current Location
+                            </button>
+                        </div>
+                        <div id="location-error" class="error-message" style="display: none;"></div>
+                    </section>
+
+                    <!-- Loading State -->
+                    <div id="loading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Loading weather data...</p>
+                    </div>
+
+                    <!-- Weather Display Section -->
+                    <section id="weather-display" class="weather-display" style="display: none;">
+                        <div class="current-weather">
+                            <h2 id="current-location">Location</h2>
+                            <div id="current-weather-data"></div>
+                        </div>
+                        <div id="forecast" class="forecast"></div>
+                    </section>
+
+                    <!-- AI Chat Section -->
+                    <section class="chat-section">
+                        <div class="chat-header">
+                            <h3>🌤️ Weather Assistant</h3>
+                            <button id="toggle-chat" class="toggle-btn">−</button>
+                        </div>
+                        <div id="chat-container" class="chat-container">
+                            <div id="chat-messages" class="chat-messages">
+                                <div class="message bot-message">
+                                    <div class="message-content">
+                                        Hello! You can ask questions about the weather. For example: "Is it suitable to go outside today?", "Can I have a picnic?", "What should I wear?"
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chat-input" placeholder="Ask a question about the weather..." class="chat-input">
+                                <button id="send-message" class="send-btn">➤</button>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="scripts/location-handler.js"></script>
+    <script src="scripts/weather-service.js"></script>
+    <script src="scripts/ui-components.js"></script>
+    <script src="scripts/map-handler.js"></script>
+    <script src="scripts/gemini-ai.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+
+</html>
