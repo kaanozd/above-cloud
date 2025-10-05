@@ -2,16 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-const fetch = (...args) =>
-    import ('node-fetch').then(({ default: fetch }) => fetch(...args));
-
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080; // ✅ 8080 yapıldı
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 // Hava durumu endpoint'i - 7 GÜNLÜK TAHMİN
 app.get('/api/weather', async(req, res) => {
@@ -56,6 +54,7 @@ app.post('/api/chat', async(req, res) => {
                 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
                 if (!GEMINI_API_KEY) {
+                    console.error('GEMINI_API_KEY bulunamadı');
                     return res.status(500).json({
                         success: false,
                         error: 'API key bulunamadı'
@@ -107,9 +106,11 @@ ${dailyData.map(day =>
 3. Türkçe yanıt ver
 4. Kısa ve öz ol
 5. Doğal konuş
-6.Biraz daha canlı ve samimi ol
-7.Uygun yerlere çok sık olmamak şartıyla emojiler koy
+6. Biraz daha canlı ve samimi ol
+7. Uygun yerlere çok sık olmamak şartıyla emojiler koy
         `.trim();
+
+        console.log('Gemini API çağrısı yapılıyor...');
 
         const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
@@ -172,10 +173,27 @@ function getWeatherDescription(code) {
     return weatherCodes[code] || "açık";
 }
 
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Backend çalışıyor' });
+    res.json({ 
+        status: 'OK', 
+        message: 'AboveCloud Backend çalışıyor',
+        timestamp: new Date().toISOString()
+    });
 });
 
-app.listen(PORT, () => {
-    console.log(`✅ Backend http://localhost:${PORT} adresinde çalışıyor`);
+// Root endpoint - Frontend'i serve et
+app.get('/', (req, res) => {
+    res.sendFile(process.cwd() + '/public/index.html');
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+    res.status(404).json({ error: 'Endpoint bulunamadı' });
+});
+
+// ✅ DÜZELTİLDİ: 0.0.0.0 ve PORT 8080
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
