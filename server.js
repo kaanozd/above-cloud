@@ -14,19 +14,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// ✅ CORS AYARI
+// ✅ CORS'U * YAP - TÜM SİTELERE İZİN VER
 app.use(cors({
-    origin: [
-        'https://lucent-centaur-6316f1.netlify.app',
-        'http://localhost:3000',
-        'http://localhost:3001'
-    ],
-    credentials: true
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
-
-// ✅ STATIC FILES (public klasörü yoksa bile)
 app.use(express.static(path.join(__dirname)));
 
 // Hava durumu endpoint'i - 7 GÜNLÜK TAHMİN
@@ -200,7 +195,7 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// ✅ ROOT ROUTE EKLE
+// Root endpoint
 app.get('/', (req, res) => {
     res.json({ 
         message: 'AboveCloud Backend API',
@@ -219,5 +214,5 @@ app.use('*', (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
-    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📍 CORS: * (tüm domainlere açık)`);
 });
