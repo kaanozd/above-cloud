@@ -14,20 +14,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// ✅ CORS AYARI - NETLIFY DOMAIN'E İZİN VER
+// ✅ CORS AYARI
 app.use(cors({
     origin: [
         'https://lucent-centaur-6316f1.netlify.app',
         'http://localhost:3000',
         'http://localhost:3001'
     ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    credentials: true
 }));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// ✅ STATIC FILES (public klasörü yoksa bile)
+app.use(express.static(path.join(__dirname)));
 
 // Hava durumu endpoint'i - 7 GÜNLÜK TAHMİN
 app.get('/api/weather', async(req, res) => {
@@ -200,6 +200,18 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// ✅ ROOT ROUTE EKLE
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'AboveCloud Backend API',
+        endpoints: {
+            health: '/api/health',
+            weather: '/api/weather?lat=...&lon=...',
+            chat: '/api/chat (POST)'
+        }
+    });
+});
+
 // 404 handler
 app.use('*', (req, res) => {
     res.status(404).json({ error: 'Endpoint bulunamadı' });
@@ -208,5 +220,4 @@ app.use('*', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ AboveCloud Backend PORT ${PORT} adresinde çalışıyor`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`📍 CORS enabled for: https://lucent-centaur-6316f1.netlify.app`);
 });
